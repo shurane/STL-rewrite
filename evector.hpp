@@ -27,7 +27,7 @@ namespace ehtesh {
                           //std::begin(resized));
 
                 std::copy(elements,
-                          elements + (sizeof(int) * m_length),
+                          elements + m_length,
                           resized);
 
                 delete[] elements;
