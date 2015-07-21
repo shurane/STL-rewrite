@@ -25,11 +25,13 @@ int main(int argc, char** argv){
     for (int i=0;i<15; i++){
         ev.push_back(i);
     }
-    std::cout << "ehtesh::vector:" << ev.m_size << " " << ev.m_capacity << std::endl;
+    std::cout << "ehtesh::vector.push_back()*TOTAL_SIZE: " << ev.m_size << " " << ev.m_capacity << std::endl;
     ev.resize(SNEAK_PEEK);
-    std::cout << "ehtesh::vector:" << ev.m_size << " " << ev.m_capacity << std::endl;
+    std::cout << "ehtesh::vector.resize(SNEAK_PEEK): " << ev.m_size << " " << ev.m_capacity << std::endl;
     ev.push_back(1);
-    std::cout << "ehtesh::vector:" << ev.m_size << " " << ev.m_capacity << std::endl;
+    std::cout << "ehtesh::vector.push_back(1):" << ev.m_size << " " << ev.m_capacity << std::endl;
+    ev.clear();
+    std::cout << "ehtesh::vector.clear(): " << ev.m_size << " " << ev.m_capacity << std::endl;
 
     return 0;
 }

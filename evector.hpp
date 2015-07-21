@@ -54,6 +54,13 @@ namespace ehtesh {
             m_capacity = goal_capacity;
         }
 
+        void clear(){
+            for (int i=0; i < m_size; i++){
+                m_elements[i] = 0;
+            }
+            m_size = 0;
+        }
+
         int& operator[](const int index){
             return m_elements[index];
         }
@@ -63,7 +70,7 @@ namespace ehtesh {
 
     std::ostream& operator<<(std::ostream &strm, const vector& v){
         static const int CUTOFF = 100;
-        static const int SNEAK_PEAK = 6;
+        static const int SNEAK_PEEK = 6;
         // TODO add .begin() and .end() function
         // TODO can this be shorter?
 
@@ -80,11 +87,11 @@ namespace ehtesh {
             strm << v.m_elements[v.m_size-1];
         }
         else {
-            for (size_t i=0; i<SNEAK_PEAK; i++){
+            for (size_t i=0; i<SNEAK_PEEK; i++){
                 strm << v.m_elements[i] << ", ";
             }
             strm << "..., ";
-            for (size_t i=v.m_size - SNEAK_PEAK; i<v.m_size-1; i++){
+            for (size_t i=v.m_size - SNEAK_PEEK; i<v.m_size-1; i++){
                 strm << v.m_elements[i] << ", ";
             }
             strm << v.m_elements[v.m_size-1];
