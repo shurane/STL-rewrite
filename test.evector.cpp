@@ -4,12 +4,12 @@
 #include <vector>
 
 int main(int argc, char** argv){
-    std::vector<int> v(10);
-    v.push_back(-1);
-    v[1] = -2;
-    std :: cout << "std::vector:" << v[15] << std::endl;
+    //std::vector<int> v(10);
+    //v.push_back(-1);
+    //v[1] = -2;
+    //std :: cout << "std::vector:" << v[15] << std::endl;
     ehtesh::vector ev(10);
-    for (int i=0; i<1e2; i++){
+    for (int i=0; i<1e6; i++){
         ev.push_back(i);
     }
     //ev[5] = -1;
