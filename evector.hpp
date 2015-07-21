@@ -1,6 +1,7 @@
 #pragma once
 #include <stddef.h>
 #include <iostream>
+#include <algorithm>
 #include <iterator>
 
 namespace ehtesh {
@@ -27,21 +28,30 @@ namespace ehtesh {
 
         void push_back(const int& value) {
             if (m_size == m_capacity){
-                int* resized = new int[2*m_capacity];
-                //std::copy(std::begin(m_elements),
-                          //std::end(m_elements),
-                          //std::begin(resized));
-
-                std::copy(m_elements,
-                          m_elements + m_capacity,
-                          resized);
-
-                delete[] m_elements;
-                m_elements = resized;
-                m_capacity = 2*m_capacity;
+                resize(2*m_capacity);
             }
 
             m_elements[m_size++] = value;
+        }
+
+        void pop_back() {
+            m_elements[m_size--] = 0;
+        }
+
+        void resize(const size_t n){
+            static const size_t MIN_SIZE = 10;
+            const size_t goal_capacity = std::max(n, MIN_SIZE);
+            
+            int* resized = new int[goal_capacity];
+            size_t goal_size = std::min(n, m_size);
+            std::copy(m_elements,
+                      m_elements + goal_size,
+                      resized);
+
+            delete[] m_elements;
+            m_elements = resized;
+            m_size = goal_size;
+            m_capacity = goal_capacity;
         }
 
         int& operator[](const int index){
