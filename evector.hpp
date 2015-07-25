@@ -5,29 +5,34 @@
 #include <iterator>
 
 namespace ehtesh {
+    // TODO
+    // - [ ] allow alternative allocators
+
     struct vector {
+
         size_t m_capacity;
         size_t m_size;
         int* m_elements;
         vector(): vector(10) {}
+
         vector(size_t length){
             m_capacity = length;
             m_elements = new int[length];
             m_size = 0;
         }
+
         ~vector()
         {
             m_capacity = 0;
             delete[] m_elements;
             m_size = 0;
         }
-        // - [x] push_back
-        // - [x] keep track of last inserted element
-        // - [x] resize when the array gets filled up
-        // - [ ] use heap allocator
 
         void push_back(const int& value) {
-            if (m_size == m_capacity){
+            if (m_size == m_capacity && m_capacity == 0){
+                resize(10);
+            }
+            else if (m_size == m_capacity && m_capacity != 0){
                 resize(2*m_capacity);
             }
 
@@ -41,7 +46,7 @@ namespace ehtesh {
         void resize(const size_t n){
             static const size_t MIN_SIZE = 10;
             const size_t goal_capacity = std::max(n, MIN_SIZE);
-            
+
             int* resized = new int[goal_capacity];
             size_t goal_size = std::min(n, m_size);
             std::copy(m_elements,
@@ -64,6 +69,55 @@ namespace ehtesh {
         int& operator[](const int index){
             return m_elements[index];
         }
+        //// TODO is this needed?
+        //const int& operator[](const int index) const{
+            //return m_elements[index];
+        //}
+
+        // http://accu.org/index.php/journals/389
+        // is forward declaration redundant?
+        struct iterator;
+        typedef iterator self_type;
+        typedef int value_type;
+        typedef size_t size_type;
+        typedef int* pointer;
+        typedef int& reference;
+
+        struct iterator {
+            pointer m_ptr;
+            iterator(pointer ptr): m_ptr(ptr) {}
+            // TODO proper way for a destructor?
+            ~iterator() {m_ptr = nullptr;}
+            // prefix
+            self_type operator++() { m_ptr++; return *this; } 
+            // postfix
+            self_type operator++(int what) {
+                self_type current_ptr = *this;
+                m_ptr++;
+                return current_ptr;
+            }
+            // prefix
+            self_type operator--() { m_ptr--; return *this; } 
+            // postfix
+            self_type operator--(int what) {
+                self_type current_ptr = *this;
+                m_ptr--;
+                return current_ptr;
+            }
+
+            reference operator*() { return *m_ptr; }
+            pointer operator->() { return m_ptr; }
+            bool operator==(const self_type& rhs) { return m_ptr == rhs.m_ptr; }
+            bool operator!=(const self_type& rhs) { return m_ptr != rhs.m_ptr; }
+        };
+
+        iterator begin(){
+            return iterator(m_elements);
+        }
+
+        iterator end(){
+            return iterator(m_elements + m_size);
+        }
 
     private:
     };
@@ -71,7 +125,6 @@ namespace ehtesh {
     std::ostream& operator<<(std::ostream &strm, const vector& v){
         static const int CUTOFF = 100;
         static const int SNEAK_PEEK = 6;
-        // TODO add .begin() and .end() function
         // TODO can this be shorter?
 
         strm << "[";
