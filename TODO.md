@@ -2,12 +2,15 @@ DATA STRUCTURES
 
     [ ] std::vector
     [ ] std::stack
+    [ ] std::queue
+    [ ] std::deque
     [ ] std::list (bidirectional linked list)
     [ ] std::skip_list
     [ ] std::map
     [ ] std::set
     [ ] std::unordered_map
     [ ] std::unordered_set
+    [ ] std::priority_queue
 
 ALGORITHMS
 

@@ -8,5 +8,8 @@ c2:
 test.evector:
 	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.evector.cpp -o main
 
+test.elist:
+	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.elist.cpp -o main
+
 run:
 	valgrind --leak-check=yes --track-origins=yes ./main
