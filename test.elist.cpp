@@ -10,13 +10,15 @@ int main(int argc, char** argv){
 
     for (int i=0; i<10; i++){
         int* j = new int(i);
-        //std::cout << *j << std::endl;
         el.push_back(j);
     }
 
+    std::cout << "m_head=" << el.m_head << std::endl;
+    std::cout << "m_tail=" << el.m_tail << std::endl;
+
     //ehtesh::node* current = el.m_head;
     //while (current){
-        //std::cout << *current->m_data << std::endl;
+        //std::cout << *current << std::endl;
         //current = current->next;
     //}
 

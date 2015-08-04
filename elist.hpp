@@ -19,7 +19,11 @@ namespace ehtesh {
     };
 
     std::ostream& operator<<(std::ostream &strm, const node& n){
-        return strm << "Node(" << *n.m_data << ")";
+        return strm << "Node(" 
+            << "m_data=" << *n.m_data 
+            << ",prev=" << n.prev
+            << ",next=" << n.next
+            << ")";
     }
 
     struct list {
@@ -43,21 +47,16 @@ namespace ehtesh {
 
         // TODO make const
         void push_back(int* value) {
-            node n = node(value);
+            node* n = new node(value);
             std::cout << "list.push_back(" << n << ")" << std::endl;
             if (m_size == 0){
-                m_head = &n;
-                m_tail = &n;
-            }
-            else if (m_size == 1){
-                node* temp = m_tail;
-                m_tail = &n;
-                m_tail->next = temp;
+                m_head = n;
+                m_tail = n;
             }
             else {
                 node* temp = m_tail;
-                m_tail = &n;
-                m_tail->next = temp;
+                temp->next = n;
+                m_tail = n;
             }
             m_size++;
         }
