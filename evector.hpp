@@ -7,6 +7,12 @@
 namespace ehtesh {
     // TODO
     // - [ ] allow alternative allocators
+    // - [ ] push_front
+    // - [ ] pop_front
+    // - [ ] slice
+    // - [ ] make vector from an interator
+    // - [ ] make vector from an interator: begin(), end()
+    // - [ ] disallow 0 as a capacity
 
     struct vector {
 
