@@ -36,12 +36,13 @@ namespace ehtesh {
             m_tail = nullptr;
         }
         ~list() {
-            // TODO iterate through linked list and delete each element
             node* current = m_head;
             while (current) {
                 std::cout << "~list(): " << *current << std::endl;
+                node* temp = current;
                 current = current->next;
-                usleep(1e5);
+                delete temp->m_data;
+                delete temp;
             }
         }
 
