@@ -8,14 +8,20 @@ int main(int argc, char** argv){
     std::list<int> l;
     ehtesh::list el;
 
-    for (int i=0; i<10; i++){
+    static const int TOTAL_SIZE = 1e3;
+
+    for (int i=0; i<TOTAL_SIZE; i++){
+        l.push_back(i);
         el.push_back(new int(i));
+    }
+
+    for (int i=0; i<TOTAL_SIZE; i++){
+        el.pop_back();
     }
 
     ehtesh::node* current = el.m_head;
     while (current){
-        std::cout << "lol current" << *current << std::endl;
-        current = current->next;
+        current = current->m_next;
     }
 
     return 0;
