@@ -39,7 +39,7 @@ namespace ehtesh {
         ~list() {
             node* current = m_head;
             while (current) {
-                std::cout << "~list(): " << *current << std::endl;
+                //std::cout << "~list(): " << *current << std::endl;
                 node* temp = current;
                 current = current->m_next;
                 delete temp;
