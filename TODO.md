@@ -14,6 +14,8 @@ DATA STRUCTURES
 
 C++
 
+    [ ] constructor using any STL container
+    [ ] constructor using an arraylist
     [ ] parameterized type via template instead of int
     [ ] smart pointer of some kind? not sure here.
     [ ] thread safe

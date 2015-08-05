@@ -15,14 +15,10 @@ int main(int argc, char** argv){
         el.push_back(new int(i));
     }
 
+    std::cout << el << std::endl;
+
     for (int i=0; i<TOTAL_SIZE; i++){
         el.pop_back();
     }
-
-    ehtesh::node* current = el.m_head;
-    while (current){
-        current = current->m_next;
-    }
-
     return 0;
 }

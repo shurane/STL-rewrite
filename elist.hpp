@@ -84,6 +84,49 @@ namespace ehtesh {
                 m_size--;
             }
         }
-
     };
+
+    std::ostream& operator<<(std::ostream &strm, const list& v){
+        static const int CUTOFF = 100;
+        static const int SNEAK_PEEK = 6;
+        // TODO unduplicate this and evector's operator<<() method
+        // TODO can this be cleaner?
+        // TODO can this be shorter?
+
+        strm << "[";
+        if (v.m_size == 0){
+        }
+        else if (v.m_size == 1){
+            strm << *v.m_head->m_data;
+        }
+        else if (v.m_size < CUTOFF){
+            node* current = v.m_head;
+            for (size_t i=0; i<v.m_size-1; i++){
+                strm << *current->m_data << ", ";
+                current = current->m_next;
+            }
+            strm << *v.m_tail->m_data;
+        }
+        else {
+            node* current;
+            current = v.m_head;
+            for (size_t i=0; i<SNEAK_PEEK; i++){
+                strm << *current->m_data << ", ";
+                current = current->m_next;
+            }
+            strm << "..., ";
+            current = v.m_tail;
+            for (size_t i=0; i<SNEAK_PEEK; i++){
+                current = current->m_prev;
+            }
+            for(size_t i=0; i<SNEAK_PEEK; i++){
+                strm << *current->m_data << ", ";
+                current = current->m_next;
+            }
+            strm << *v.m_tail->m_data;
+        }
+        strm << "]";
+        return strm;
+    }
+
 }
