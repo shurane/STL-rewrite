@@ -12,4 +12,7 @@ test.elist:
 	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.elist.cpp -o main
 
 run:
+	./main
+
+run.valgrind:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./main
