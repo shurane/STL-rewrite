@@ -7,22 +7,21 @@
 
 namespace ehtesh {
     struct node {
-        const int* m_data;
+        const int& m_data;
         node* m_next;
         node* m_prev;
-        node(const int* data) {
-            m_data = data;
+        node(const int& data): m_data(data) {
             m_next = nullptr;
             m_prev = nullptr;
         }
         ~node() {
-            delete m_data;
+            //delete m_data;
         }
     };
 
     std::ostream& operator<<(std::ostream &strm, const node& n){
-        return strm << "Node("
-            << "m_data=" << *n.m_data
+        return strm << "Node(" 
+            << "m_data=" << n.m_data 
             << ",m_prev=" << n.m_prev
             << ",m_next=" << n.m_next
             << ")";
@@ -47,11 +46,9 @@ namespace ehtesh {
             }
         }
 
-        // TODO make way to provide primitive types without using `new`
-        // TODO why does this work differently than in vector.push_back()?
-        void push_back(const int* value) {
+        void push_back(const int& value) {
             node* n = new node(value);
-            //std::cout << "list.push_back(" << *n << ")" << std::endl;
+            std::cout << "list.push_back(" << *n << ")" << std::endl;
             if (m_size == 0){
                 m_head = n;
                 m_tail = n;
@@ -128,21 +125,21 @@ namespace ehtesh {
         if (v.m_size == 0){
         }
         else if (v.m_size == 1){
-            strm << *v.m_head->m_data;
+            strm << v.m_head->m_data;
         }
         else if (v.m_size < CUTOFF){
             node* current = v.m_head;
             for (size_t i=0; i<v.m_size-1; i++){
-                strm << *current->m_data << ", ";
+                strm << current->m_data << ", ";
                 current = current->m_next;
             }
-            strm << *v.m_tail->m_data;
+            strm << v.m_tail->m_data;
         }
         else {
             node* current;
             current = v.m_head;
             for (size_t i=0; i<SNEAK_PEEK; i++){
-                strm << *current->m_data << ", ";
+                strm << current->m_data << ", ";
                 current = current->m_next;
             }
             strm << "..., ";
@@ -151,10 +148,10 @@ namespace ehtesh {
                 current = current->m_prev;
             }
             for(size_t i=0; i<SNEAK_PEEK; i++){
-                strm << *current->m_data << ", ";
+                strm << current->m_data << ", ";
                 current = current->m_next;
             }
-            strm << *v.m_tail->m_data;
+            strm << v.m_tail->m_data;
         }
         strm << "]";
         return strm;

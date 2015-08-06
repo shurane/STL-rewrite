@@ -12,7 +12,7 @@ int main(int argc, char** argv){
 
     for (int i=0; i<TOTAL_SIZE; i++){
         l.push_back(i);
-        el.push_back(new int(i));
+        el.push_back(i);
     }
 
     std::cout << el << std::endl;
