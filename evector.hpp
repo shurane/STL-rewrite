@@ -10,8 +10,8 @@ namespace ehtesh {
     // - [ ] push_front
     // - [ ] pop_front
     // - [ ] slice
-    // - [ ] make vector from an interator
-    // - [ ] make vector from an interator: begin(), end()
+    // - [ ] make vector from an iterator
+    // - [ ] make vector from an iterator: begin(), end()
     // - [ ] disallow 0 as a capacity
 
     struct vector {
