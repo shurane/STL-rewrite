@@ -7,10 +7,11 @@
 
 namespace ehtesh {
     struct node {
-        const int& m_data;
+        const int m_data;
         node* m_next;
         node* m_prev;
-        node(const int& data): m_data(data) {
+        // TODO is there a way to use `const int&` here?
+        node(const int data): m_data(data) {
             m_next = nullptr;
             m_prev = nullptr;
         }
@@ -48,7 +49,6 @@ namespace ehtesh {
 
         void push_back(const int& value) {
             node* n = new node(value);
-            std::cout << "list.push_back(" << *n << ")" << std::endl;
             if (m_size == 0){
                 m_head = n;
                 m_tail = n;
@@ -63,7 +63,6 @@ namespace ehtesh {
         }
 
         void pop_back() {
-            //std::cout << "list.pop_back(" << *m_tail << ")" << std::endl;
             if (m_size == 0) {
                 // TODO undefined
             }
@@ -84,6 +83,43 @@ namespace ehtesh {
             }
         }
 
+        void push_front(const int& value) {
+            node* n = new node(value);
+            if (m_size == 0){
+                m_head = n;
+                m_tail = n;
+            }
+            else {
+                node* temp = m_head;
+                temp->m_prev = n;
+                n->m_next = temp;
+                m_head = n;
+            }
+            m_size++;
+        }
+
+        void pop_front() {
+            if (m_size == 0) {
+                // TODO undefined
+            }
+            else if (m_size == 1) {
+                node* temp = m_tail;
+                delete temp;
+                m_head = nullptr;
+                m_tail = nullptr;
+                m_size--;
+            }
+            else {
+                node* temp = m_head;
+                node* next = m_head->m_next;
+                next->m_prev = nullptr;
+                delete temp;
+                m_head = next;
+                m_size--;
+            }
+        }
+
+
         // TODO resize makes the linked list a lot more annoying
         void resize(const size_t n){
             static const size_t MIN_SIZE = 10;
@@ -93,7 +129,7 @@ namespace ehtesh {
             if (m_size < goal_size){
                 node* current = m_tail;
                 for (int i=m_size; i<goal_size; i++) {
-                    node* n = new node(new int);
+                    node* n = new node(0);
                     current->m_next = n;
                     n->m_prev = current;
                     current = current->m_next;
