@@ -76,9 +76,9 @@ namespace ehtesh {
             return m_elements[index];
         }
         //// TODO is this needed?
-        //const int& operator[](const int index) const{
-            //return m_elements[index];
-        //}
+        const int& operator[](const int index) const{
+            return m_elements[index];
+        }
 
         // http://accu.org/index.php/journals/389
         // is forward declaration redundant?

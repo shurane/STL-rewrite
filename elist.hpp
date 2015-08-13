@@ -3,11 +3,10 @@
 #include <iostream>
 #include <iterator>
 #include <stddef.h>
-#include <unistd.h>
 
 namespace ehtesh {
     struct node {
-        const int m_data;
+        int m_data;
         node* m_next;
         node* m_prev;
         // TODO is there a way to use `const int&` here?
@@ -21,8 +20,8 @@ namespace ehtesh {
     };
 
     std::ostream& operator<<(std::ostream &strm, const node& n){
-        return strm << "Node(" 
-            << "m_data=" << n.m_data 
+        return strm << "Node("
+            << "m_data=" << n.m_data
             << ",m_prev=" << n.m_prev
             << ",m_next=" << n.m_next
             << ")";
@@ -119,8 +118,7 @@ namespace ehtesh {
             }
         }
 
-
-        // TODO resize makes the linked list a lot more annoying
+        // TODO how to also include m_capacity?
         void resize(const size_t n){
             static const size_t MIN_SIZE = 10;
             size_t goal_size = std::max(n, MIN_SIZE);
@@ -148,6 +146,61 @@ namespace ehtesh {
                 m_size = goal_size;
             }
         }
+
+        struct iterator;
+        typedef iterator self_type;
+        typedef int value_type;
+        typedef size_t size_type;
+        typedef int* pointer;
+        typedef int& reference;
+
+        struct iterator {
+            node* m_ptr;
+            iterator(node* ptr): m_ptr(ptr) {}
+            // TODO proper way for a destructor?
+            ~iterator() {m_ptr = nullptr;}
+            // prefix
+            self_type operator++() {
+                m_ptr = m_ptr->m_next;
+                return *this;
+            }
+            // postfix
+            self_type operator++(int what) {
+                self_type current_ptr = *this;
+                m_ptr = m_ptr->m_next;
+                return current_ptr;
+            }
+            // prefix
+            self_type operator--() {
+                m_ptr = m_ptr->m_prev;
+                return *this;
+            }
+            // postfix
+            self_type operator--(int what) {
+                self_type current_ptr = *this;
+                m_ptr = m_ptr->m_prev;
+                return current_ptr;
+            }
+
+            reference operator*() { return m_ptr->m_data; }
+            pointer operator->() { return &m_ptr->m_data; }
+            bool operator==(const self_type& rhs) {
+                return m_ptr == rhs.m_ptr;
+            }
+            bool operator!=(const self_type& rhs) {
+                return m_ptr != rhs.m_ptr;
+            }
+        };
+
+        iterator begin(){
+            return iterator(m_head);
+        }
+
+        iterator end(){
+            return iterator(m_tail);
+        }
+
+
     };
 
     std::ostream& operator<<(std::ostream &strm, const list& v){
