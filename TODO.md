@@ -35,5 +35,12 @@ BONUS
 
 2015/08/04 goals
 
-    [ ] working list.push_back(int)
-    [ ] working list.pop_back()
+    [x] working list.push_back(int)
+    [x] working list.pop_back()
+
+2015/08/13
+
+    [ ] tree.insert(int)
+    [ ] tree.remove()
+    [ ] operator<<(strm, tree)
+    [ ] self balancing tree

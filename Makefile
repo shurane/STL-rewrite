@@ -11,6 +11,9 @@ test.evector:
 test.elist:
 	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.elist.cpp -o main
 
+test.tree:
+	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.tree.cpp -o main
+
 run:
 	./main
 

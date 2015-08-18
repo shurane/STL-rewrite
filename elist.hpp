@@ -14,9 +14,6 @@ namespace ehtesh {
             m_next = nullptr;
             m_prev = nullptr;
         }
-        ~node() {
-            //delete m_data;
-        }
     };
 
     std::ostream& operator<<(std::ostream &strm, const node& n){
