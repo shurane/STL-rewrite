@@ -3,97 +3,138 @@
 #include <algorithm>
 #include <iterator>
 
-// plain 'ol binary search tree
 namespace ehtesh {
-    struct node {
-        int m_data;
-        node* m_parent;
-        node* m_left;
-        node* m_right;
-        // TODO is there a way to use `const int&` here?
-        node(const int data): m_data(data) {
-            m_parent = nullptr;
-            m_left = nullptr;
-            m_right = nullptr;
-        }
-        ~node() {
-        }
-        node* leftmost() {
-            if (this->m_left)
-                return this->m_left->leftmost();
-            else
-                return nullptr;
-            
-        }
+    template <typename T>
+    struct Node {
+        // TODO see if I can bring const back
+        T m_data;
+        Node<T>* m_parent = nullptr;
+        Node<T>* m_left = nullptr;
+        Node<T>* m_right = nullptr;
+        Node(const T& data): m_data(data) {}
+        ~Node() {}
+
     };
 
-    struct tree {
-        node* m_root;
+    template <typename T>
+    struct Tree {
+        Node<T>* m_root;
         int m_size;
 
-        tree() {
+        Tree() {
             m_root = nullptr;
             m_size = 0;
         }
-        void tree_destructor_helper(node* start){
-            if (start->m_left){
-                tree_destructor_helper(start->m_left);
-            }
-            if (start->m_right){
-                tree_destructor_helper(start->m_right);
-            }
-            delete start;
-        }
-        ~tree() {
-            if (m_root){
+
+        ~Tree() {
+            if (m_root)
                 tree_destructor_helper(m_root);
-            }
         }
 
-        void insert_helper(node* start, node* n){
-            if (n->m_data < start->m_data){
-                if (start->m_left){
-                    insert_helper(start->m_left, n);
+        void tree_destructor_helper(Node<T>* parent){
+            if (parent->m_left)
+                tree_destructor_helper(parent->m_left);
+            if (parent->m_right)
+                tree_destructor_helper(parent->m_right);
+            delete parent;
+        }
+
+        void insert(const T& data){
+            auto* node = new Node<T>(data);
+            if (m_root == nullptr)
+                m_root = node;
+            else
+                insert_helper(m_root, node);
+        }
+
+        void insert_helper(Node<T>* parent, Node<T>* node){
+            if (parent->m_data < node->m_data){
+                if (parent->m_left){
+                    insert_helper(parent->m_left, node);
                 }
                 else {
-                    start->m_left = n;
-                    n->m_parent = start->m_left;
+                    parent->m_left = node;
+                    node->m_parent = parent;
                 }
             }
             else {
-                if (start->m_right){
-                    insert_helper(start->m_right, n);
+                if (parent->m_right){
+                    insert_helper(parent->m_right, node);
                 }
                 else {
-                    start->m_right = n;
-                    n->m_parent = start->m_right;
+                    parent->m_right = node;
+                    node->m_parent = parent;
                 }
             }
         }
 
-        void insert(const int& data){
-            node* n = new node(data);
-            if (m_root == nullptr){
-                m_root = n;
-            }
-            else {
-                insert_helper(m_root, n);
-            }
-            m_size++;
+        enum Direction { LEFT, RIGHT, NONE };
+        bool erase(const T& data){
+            return erase_helper(NONE, m_root, data);
         }
 
-        void remove_node(node* start){
-            if (!start->m_left && !start->m_right){
-                delete start;
+        // https://en.wikipedia.org/wiki/Binary_search_tree#Deletion
+        // TODO verify
+        bool erase_helper(Direction d, Node<T>* current, const T& data){
+            if (current->m_data < data){
+                if (!current->m_left)
+                    return false;
+                else
+                    return erase_helper(LEFT, current->m_left, data);
             }
-            if (!start->m_left){
-                // TODO
+            else if (current->m_data > data){
+                if (!current->m_right)
+                    return false;
+                else
+                    return erase_helper(RIGHT, current->m_right, data);
+            }
+            else {
+                // How to make this code less verbose?
+                if (!current->m_left && !current->m_right){
+                    if (d == LEFT)
+                        current->m_parent->m_left = nullptr;
+                    else if (d == RIGHT)
+                        current->m_parent->m_right = nullptr;
+                }
+                else if (!current->m_left){
+                    if (d == LEFT){
+                        current->m_parent->m_left = current->m_right;
+                        current->m_right->m_parent = current->m_parent;
+                    }
+                    else if (d == RIGHT){
+                        current->m_parent->m_right = current->m_right;
+                        current->m_right->m_parent = current->m_parent;
+                    }
+                }
+                else if (!current->m_right){
+                    if (d == LEFT){
+                        current->m_parent->m_left = current->m_right;
+                        current->m_right->m_parent = current->m_parent;
+                    }
+                    else if (d == RIGHT){
+                        current->m_parent->m_right = current->m_right;
+                        current->m_right->m_parent = current->m_parent;
+                    }
+                }
+                else {
+                    // grab the leftmost child to the right of the current
+                    // node, swap nodes, and then delete the current node
+                    auto* leftmost = current->m_right;
+                    while (leftmost->m_left)
+                        leftmost = leftmost->m_left;
+                    current->m_data = leftmost->m_data;
+                    erase(leftmost->m_data);
+                }
+
+                delete current;
+                return true;
             }
         }
     };
 
     // http://stackoverflow.com/a/8948691/198348
-    void ostream_helper(std::ostream &strm, const node* n, std::string prefix, bool is_tail){
+    template <typename T>
+    void ostream_helper(std::ostream &strm, const Node<T>* n, std::string prefix, bool is_tail){
         strm << prefix + (is_tail ? "└── " : "├── ") << n->m_data << std::endl;
 
         if (n->m_left && !n->m_right){
@@ -108,10 +149,15 @@ namespace ehtesh {
         }
     }
 
-    // TODO how to print out the shape of the tree?
-    std::ostream& operator<<(std::ostream &strm, const tree& t){
+    template <typename T>
+    std::ostream& operator<<(std::ostream &strm, const Node<T>& t){
+        return strm << "Node(" + t.m_data + ")";
+    }
+
+    template <typename T>
+    std::ostream& operator<<(std::ostream &strm, const Tree<T>& t){
         if (t.m_root) {
-            ostream_helper(strm, t.m_root, std::string(), true);
+            ostream_helper(strm, t.m_root, "", true);
         }
         return strm;
     }

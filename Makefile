@@ -14,6 +14,9 @@ test.elist:
 test.tree:
 	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.tree.cpp -o main
 
+test.treemap:
+	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.treemap.cpp -o main
+
 run:
 	./main
 
