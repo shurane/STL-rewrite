@@ -1,4 +1,4 @@
-#include "tree.hpp"
+#include "etree.hpp"
 #include <iostream>
 
 // http://stackoverflow.com/a/12468109/198348
@@ -41,6 +41,6 @@ int main(int argc, char** argv){
     std::cout << et2 << std::endl;
     std::cout << et3 << std::endl;
 
-    et3.remove_node("tzxlYvKWrO");
+    et3.erase("tzxlYvKWrO");
 
 }

@@ -11,10 +11,10 @@ test.evector:
 test.elist:
 	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.elist.cpp -o main
 
-test.tree:
-	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.tree.cpp -o main
+test.etree:
+	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.etree.cpp -o main
 
-test.treemap:
+test.etreemap:
 	$(CXX) $(CPPFLAGS) $(LDFLAGS) test.treemap.cpp -o main
 
 run:
