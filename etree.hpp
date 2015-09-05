@@ -150,8 +150,8 @@ namespace ehtesh {
             Node<T>* m_ptr;
             iterator(pointer ptr): m_ptr(ptr) {}
 
-            // prefix
-            self_type operator++() { 
+            // http://stackoverflow.com/a/12851421/198348
+            self_type increment() {
                 if (m_ptr->m_right) {
                     m_ptr = m_ptr->m_right;
                     while (m_ptr->m_left)
@@ -171,10 +171,17 @@ namespace ehtesh {
                         m_ptr = m_ptr->m_parent;
                     }
                 }
+            }
+
+            // prefix
+            self_type operator++() { 
+                return increment();
             } 
             // postfix
             self_type operator++(int what) {
-                // TODO
+                //increment();
+                //return *this;
+                return increment();
             }
             // prefix
             self_type operator--() { m_ptr--; return *this; } 

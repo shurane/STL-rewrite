@@ -55,7 +55,7 @@ int main(int argc, char** argv){
     auto it4 = et4.begin();
     while (it4 != et4.end()){
         usleep(5e4);
-        std::cout << *(++it4) << std::endl;
+        std::cout << *(it4++) << std::endl;
     }
 
     std::cout << et4 << std::endl;
