@@ -1,5 +1,6 @@
 #include "etree.hpp"
 #include <iostream>
+#include <unistd.h>
 
 // http://stackoverflow.com/a/12468109/198348
 // though I'm surprised this chooses to use rand()
@@ -37,10 +38,28 @@ int main(int argc, char** argv){
     for (int i=0; i< TOTAL_SIZE; i++){
         et3.insert(random_string(10));
     }
-    std::cout << et1 << std::endl;
-    std::cout << et2 << std::endl;
-    std::cout << et3 << std::endl;
+
+    //std::cout << et1 << std::endl;
+    //std::cout << et2 << std::endl;
+    //std::cout << et3 << std::endl;
+
+    ehtesh::Tree<std::string> et4;
+    et4.insert("d");
+    et4.insert("b");
+    et4.insert("f");
+    et4.insert("a");
+    et4.insert("c");
+    et4.insert("e");
+    et4.insert("g");
+
+    auto it4 = et4.begin();
+    while (it4 != et4.end()){
+        usleep(5e4);
+        std::cout << *(++it4) << std::endl;
+    }
+
+    std::cout << et4 << std::endl;
+
 
     et3.erase("tzxlYvKWrO");
-
 }

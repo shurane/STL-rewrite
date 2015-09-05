@@ -4,6 +4,8 @@
 #include <iterator>
 
 namespace ehtesh {
+    enum DIRECTION { LEFT, RIGHT, NONE };
+
     template <typename T>
     struct Node {
         // TODO see if I can bring const back
@@ -45,10 +47,11 @@ namespace ehtesh {
                 m_root = node;
             else
                 insert_helper(m_root, node);
+            m_size++;
         }
 
         void insert_helper(Node<T>* parent, Node<T>* node){
-            if (parent->m_data < node->m_data){
+            if (node->m_data < parent->m_data){
                 if (parent->m_left){
                     insert_helper(parent->m_left, node);
                 }
@@ -68,14 +71,18 @@ namespace ehtesh {
             }
         }
 
-        enum Direction { LEFT, RIGHT, NONE };
         bool erase(const T& data){
-            return erase_helper(NONE, m_root, data);
+            if (erase_helper(NONE, m_root, data)){
+                m_size--;
+                return true;
+            }
+            else 
+                return false;
         }
 
         // https://en.wikipedia.org/wiki/Binary_search_tree#Deletion
         // TODO verify
-        bool erase_helper(Direction d, Node<T>* current, const T& data){
+        bool erase_helper(DIRECTION d, Node<T>* current, const T& data){
             if (current->m_data < data){
                 if (!current->m_left)
                     return false;
@@ -130,12 +137,84 @@ namespace ehtesh {
                 return true;
             }
         }
+
+        // TODO styling of this iterator is different than in elist. Synchronize the two.
+        struct iterator;
+        typedef iterator self_type;
+        typedef T value_type;
+        typedef size_t size_type;
+        typedef Node<T>* pointer;
+        typedef Node<T>& reference;
+
+        struct iterator {
+            Node<T>* m_ptr;
+            iterator(pointer ptr): m_ptr(ptr) {}
+
+            // prefix
+            self_type operator++() { 
+                if (m_ptr->m_right) {
+                    m_ptr = m_ptr->m_right;
+                    while (m_ptr->m_left)
+                        m_ptr = m_ptr->m_left;
+                    return *this;
+                }
+                else {
+                    while (true){
+                        if (!m_ptr->m_parent){
+                            m_ptr = nullptr;
+                            return *this;
+                        }
+                        if (m_ptr->m_parent->m_left == m_ptr){
+                            m_ptr = m_ptr->m_parent;
+                            return *this;
+                        }
+                        m_ptr = m_ptr->m_parent;
+                    }
+                }
+            } 
+            // postfix
+            self_type operator++(int what) {
+                // TODO
+            }
+            // prefix
+            self_type operator--() { m_ptr--; return *this; } 
+            // postfix
+            self_type operator--(int what) {
+                self_type current_ptr = *this;
+                m_ptr--;
+                return current_ptr;
+            }
+
+            reference operator*() { return *m_ptr; }
+            pointer operator->() { return m_ptr; }
+            bool operator==(const self_type& rhs) { return m_ptr == rhs.m_ptr; }
+            bool operator!=(const self_type& rhs) { return m_ptr != rhs.m_ptr; }
+        };
+
+        iterator begin(){
+            auto* leftmost = m_root;
+            std::cout << "iterator::begin()" << *leftmost << std::endl;
+            while (leftmost && leftmost->m_left){
+                leftmost = leftmost->m_left;
+                std::cout << "iterator::begin()" << *leftmost << std::endl;
+            }
+            return iterator(leftmost);
+        }
+
+        iterator end(){
+            auto* rightmost = m_root;
+            while (rightmost && rightmost->m_right)
+                rightmost = rightmost->m_right;
+            return iterator(rightmost);
+        }
+
     };
 
     // http://stackoverflow.com/a/8948691/198348
     template <typename T>
     void ostream_helper(std::ostream &strm, const Node<T>* n, std::string prefix, bool is_tail){
-        strm << prefix + (is_tail ? "└── " : "├── ") << n->m_data << std::endl;
+        
+        strm << prefix + (is_tail ? "└── " : "├── ")  << n->m_data << std::endl;
 
         if (n->m_left && !n->m_right){
             ostream_helper(strm, n->m_left, prefix + (is_tail ? "    " : "│   "), true);

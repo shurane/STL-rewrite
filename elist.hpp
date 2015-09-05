@@ -154,8 +154,9 @@ namespace ehtesh {
         struct iterator {
             node* m_ptr;
             iterator(node* ptr): m_ptr(ptr) {}
-            // TODO proper way for a destructor?
+            // TODO is destructor necessary?
             ~iterator() {m_ptr = nullptr;}
+            // TODO are the prefix and postfix operators working?
             // prefix
             self_type operator++() {
                 m_ptr = m_ptr->m_next;
